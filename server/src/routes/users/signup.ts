@@ -1,7 +1,6 @@
 import { hash } from 'argon2';
 import { FastifyPluginAsync } from 'fastify';
 import * as Joi from 'joi';
-import prismaClient from '../../lib/prisma';
 
 const GRAVATAR_URL =
   'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
@@ -20,7 +19,7 @@ const SignUpBodySchema = Joi.object()
   })
   .required();
 
-const register: FastifyPluginAsync = async function (fastify, opts) {
+const signup: FastifyPluginAsync = async function (fastify, opts) {
   fastify.post<{ Body: SignUpBodyType }>(
     '/signup',
     {
@@ -32,14 +31,14 @@ const register: FastifyPluginAsync = async function (fastify, opts) {
     async function (req, res) {
       try {
         const { name, email, password } = req.body;
-        const emailUser = await prismaClient.user.findUnique({
+        const emailUser = await fastify.prisma.user.findUnique({
           where: { email },
         });
         if (emailUser) {
           return res.code(400).send({ email: 'Email already registered' });
         }
         const hashedPassword = await hash(password);
-        const user = await prismaClient.user.create({
+        const user = await fastify.prisma.user.create({
           data: {
             email,
             name,
@@ -62,4 +61,4 @@ const register: FastifyPluginAsync = async function (fastify, opts) {
   );
 };
 
-export default register;
+export default signup;

@@ -21,6 +21,7 @@ model User {
 
 model Invoice {
   id                  String        @id @default(uuid()) @db.Uuid
+  uuid6               String
   billerStreetAddress String
   billerCity          String
   billerZipCode       String
@@ -32,12 +33,19 @@ model Invoice {
   clientZipCode       String
   clientCountry       String
   invoiceDate         DateTime
+  invoiceDateUnix     Int
   paymentDueDate      DateTime
+  paymentDueDateUnix  Int
+  paymentTerms        String
+  productDescription  String
+  invoicePending      Boolean
+  invoiceDraft        Boolean
+  invoicePaid         Boolean?      @default(false)
+  invoiceTotal        Float
   createdAt           DateTime      @default(now()) @db.Timestamp(6)
-  published           Boolean       @default(false)
   authorId            String        @db.Uuid
   User                User          @relation(fields: [authorId], references: [id])
-  Items               InvoiceItem[]
+  invoiceItems        InvoiceItem[]
 }
 
 model InvoiceItem {

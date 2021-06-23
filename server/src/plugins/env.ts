@@ -6,9 +6,10 @@ export default fp<fastifyEnvOpt>(async function (fastify, opts) {
     dotenv: true,
     schema: {
       type: 'object',
-      required: ['JWT_SECRET'],
+      required: ['JWT_SECRET', 'NODE_ENV'],
       properties: {
         JWT_SECRET: { type: 'string' },
+        NODE_ENV: { type: 'string' },
       },
     },
   });

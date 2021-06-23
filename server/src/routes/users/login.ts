@@ -1,7 +1,6 @@
 import { verify } from 'argon2';
 import { FastifyPluginAsync } from 'fastify';
 import * as Joi from 'joi';
-import prismaClient from '../../lib/prisma';
 
 interface LoginBodyType {
   email: string;
@@ -31,7 +30,7 @@ const login: FastifyPluginAsync = async function (fastify, opts) {
     async (req, res) => {
       try {
         const { email, password } = req.body;
-        const user = await prismaClient.user.findUnique({
+        const user = await fastify.prisma.user.findUnique({
           where: { email },
         });
         if (!user) {
