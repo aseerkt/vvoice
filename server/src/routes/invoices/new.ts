@@ -3,7 +3,7 @@ import { AddInvoiceSchema, Invoice } from './schema';
 
 const newInvoice: FastifyPluginAsync = async function (fastify) {
   fastify.post<{ Body: Invoice }>(
-    '/new',
+    '/',
     {
       schema: { body: AddInvoiceSchema },
       preValidation: [fastify.authenticate],
@@ -35,15 +35,16 @@ const newInvoice: FastifyPluginAsync = async function (fastify) {
             productDescription: req.body.productDescription,
           },
         });
+        const itemsToAdd = req.body.invoiceItemList.map(
+          ({ itemName, price, qty }) => ({
+            invoiceId: invoice.id,
+            itemName: itemName,
+            price: price,
+            qty: qty,
+          })
+        );
         const invoiceItems = await fastify.prisma.invoiceItem.createMany({
-          data: [
-            ...req.body.invoiceItemList.map(({ itemName, price, qty }) => ({
-              invoiceId: invoice.id,
-              itemName: itemName,
-              price: price,
-              qty: qty,
-            })),
-          ],
+          data: itemsToAdd,
           skipDuplicates: true,
         });
 

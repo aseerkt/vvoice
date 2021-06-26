@@ -102,7 +102,7 @@
             </tr>
           </table>
 
-          <div @click="addNewInvoiceItem" class="button">
+          <div @click="addNewInvoiceItem" class="button add-button">
             <font-icon icon="plus-circle" />
             Add New Item
           </div>
@@ -127,10 +127,9 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import { v4 as uuid } from 'uuid';
 import makeId from '@/utils/makeId';
-import axios from 'axios';
 
 export default {
   name: 'InvoiceModal',
@@ -138,24 +137,24 @@ export default {
     return {
       docId: null,
       loading: null,
-      billerStreetAddress: null,
-      billerCity: null,
-      billerZipCode: null,
-      billerCountry: null,
-      clientName: null,
-      clientEmail: null,
-      clientStreetAddress: null,
-      clientCity: null,
-      clientZipCode: null,
-      clientCountry: null,
-      invoiceDateUnix: null,
-      invoiceDate: null,
-      paymentTerms: null,
-      paymentDueDateUnix: null,
-      paymentDueDate: null,
-      productDescription: null,
-      invoicePending: null,
-      invoiceDraft: null,
+      billerStreetAddress: '',
+      billerCity: '',
+      billerZipCode: '',
+      billerCountry: '',
+      clientName: '',
+      clientEmail: '',
+      clientStreetAddress: '',
+      clientCity: '',
+      clientZipCode: '',
+      clientCountry: '',
+      invoiceDateUnix: '',
+      invoiceDate: '',
+      paymentTerms: '',
+      paymentDueDateUnix: '',
+      paymentDueDate: '',
+      productDescription: '',
+      invoicePending: '',
+      invoiceDraft: '',
       invoiceItemList: [],
       invoiceTotal: 0,
     };
@@ -171,7 +170,7 @@ export default {
   },
   methods: {
     ...mapMutations('invoice', ['toggleInvoice']),
-
+    ...mapActions('invoice', ['addInvoice']),
     closeInvoice() {
       this.toggleInvoice();
     },
@@ -188,38 +187,30 @@ export default {
       }
       this.calcInvoiceTotal();
 
-      await axios.post(
-        'http://localhost:3000/api/invoices/new',
-        {
-          invoiceId: makeId(6),
-          billerStreetAddress: this.billerStreetAddress,
-          billerCity: this.billerCity,
-          billerZipCode: this.billerZipCode,
-          billerCountry: this.billerCountry,
-          clientName: this.clientName,
-          clientEmail: this.clientEmail,
-          clientStreetAddress: this.clientStreetAddress,
-          clientCity: this.clientCity,
-          clientZipCode: this.clientZipCode,
-          clientCountry: this.clientCountry,
-          invoiceDate: this.invoiceDate,
-          invoiceDateUnix: this.invoiceDateUnix,
-          paymentTerms: this.paymentTerms,
-          paymentDueDate: this.paymentDueDate,
-          paymentDueDateUnix: this.paymentDueDateUnix,
-          productDescription: this.productDescription,
-          invoiceItemList: this.invoiceItemList,
-          invoiceTotal: this.invoiceTotal,
-          invoicePending: this.invoicePending,
-          invoiceDraft: this.invoiceDraft,
-          // invoicePaid: null,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('vtk')}`,
-          },
-        },
-      );
+      await this.addInvoice({
+        invoiceId: makeId(6),
+        billerStreetAddress: this.billerStreetAddress,
+        billerCity: this.billerCity,
+        billerZipCode: this.billerZipCode,
+        billerCountry: this.billerCountry,
+        clientName: this.clientName,
+        clientEmail: this.clientEmail,
+        clientStreetAddress: this.clientStreetAddress,
+        clientCity: this.clientCity,
+        clientZipCode: this.clientZipCode,
+        clientCountry: this.clientCountry,
+        invoiceDate: this.invoiceDate,
+        invoiceDateUnix: this.invoiceDateUnix,
+        paymentTerms: this.paymentTerms,
+        paymentDueDate: this.paymentDueDate,
+        paymentDueDateUnix: this.paymentDueDateUnix,
+        productDescription: this.productDescription,
+        invoiceItemList: this.invoiceItemList,
+        invoiceTotal: this.invoiceTotal,
+        invoicePending: this.invoicePending,
+        invoiceDraft: this.invoiceDraft,
+        // invoicePaid: null,
+      });
       // console.log(res);
       // console.log(uuid(6));
     },
@@ -285,13 +276,13 @@ export default {
     padding: 56px;
     max-width: 700px;
     widows: 100%;
-    background-color: #141625;
-    color: #fff;
+    background-color: var(--clr-bg-primary);
+    color: var(--clr-text-primary);
     box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
     h1 {
       margin-bottom: 48px;
-      color: #fff;
+      color: var(--clr-text-primary);
     }
 
     h3 {
@@ -388,8 +379,8 @@ export default {
       }
       .button {
         display: flex;
-        color: #fff;
-        background-color: #252945;
+        color: var(--clr-text-primary);
+        background-color: var(--clr-bg-teritiary);
         align-items: center;
         justify-content: center;
         width: 100%;
@@ -399,6 +390,12 @@ export default {
         }
       }
     }
+  }
+
+  .add-button {
+    background-color: var(--clr-bg-teritiary);
+    color: var(--clr-text-secondary);
+    border: 1px solid var(--clr-border);
   }
 
   .save {
@@ -415,12 +412,15 @@ export default {
   }
 
   .dark-purple {
-    background-color: #252945;
+    background-color: var(--clr-bg-teritiary);
+    color: var(--clr-text-primary);
   }
   .red {
     background-color: #ec5757;
+    color: var(--clr-text-secondary);
   }
   .purple {
+    color: var(--clr-text-secondary);
     background-color: #7c5dfa;
   }
 }

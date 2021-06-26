@@ -56,7 +56,7 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  color: #fff;
+  color: var(--clr-text-primary);
 }
 
 header {
@@ -96,6 +96,7 @@ header {
 
     span,
     svg {
+      font-weight: 600;
       pointer-events: none;
     }
 
@@ -111,7 +112,7 @@ header {
       position: absolute;
       top: 25px;
       list-style: none;
-      background-color: #1e2139;
+      background-color: var(--clr-bg-secondary);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
       li {
@@ -121,8 +122,8 @@ header {
         user-select: none;
 
         &:hover {
-          color: #1e2139;
-          background-color: #fff;
+          color: var(--clr-bg-secondary);
+          background-color: var(--clr-text-primary);
         }
       }
     }
@@ -130,9 +131,11 @@ header {
 
   .button {
     display: flex;
-    padding: 8px 10px;
+    padding: 12px 10px;
     background-color: #7c5dfa;
     border-radius: 40px;
+    font-weight: 600;
+    color: var(--clr-text-secondary);
 
     .inner-buttons {
       display: flex;
@@ -140,7 +143,7 @@ header {
       align-items: center;
       margin-right: 8px;
       border-radius: 50%;
-      padding: 8px;
+      padding: 10px;
       background-color: #fff;
 
       svg {

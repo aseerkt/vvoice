@@ -22,9 +22,6 @@ export default {
   computed: {
     ...mapState('user', ['user']),
   },
-  created() {
-    console.log(this.user);
-  },
 };
 </script>
 
@@ -35,7 +32,7 @@ header {
   background-color: #1e2139;
   justify-content: space-between;
 
-  @media screen and (min-width: 900px) {
+  @media screen and (min-width: 768px) {
     min-height: 100%;
     min-width: 90px;
     flex-direction: column;
@@ -49,7 +46,7 @@ header {
     justify-content: center;
     padding: 24px;
 
-    @media screen and (min-width: 900px) {
+    @media screen and (min-width: 768px) {
       width: 100%;
     }
 
@@ -73,7 +70,7 @@ header {
       margin-left: 1rem;
     }
 
-    @media screen and (min-width: 900px) {
+    @media screen and (min-width: 768px) {
       flex-direction: column;
       padding-right: 0;
       padding-bottom: 1rem;

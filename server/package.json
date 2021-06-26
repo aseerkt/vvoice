@@ -26,8 +26,7 @@
     "fastify-env": "^2.1.1",
     "fastify-jwt": "^3.0.0",
     "fastify-plugin": "^3.0.0",
-    "fastify-sensible": "^3.1.0",
-    "joi": "^17.4.0"
+    "fastify-sensible": "^3.1.0"
   },
   "devDependencies": {
     "@types/node": "^15.0.0",

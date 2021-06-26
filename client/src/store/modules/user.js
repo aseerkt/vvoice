@@ -1,5 +1,5 @@
 // import router from '@/router';
-import { getUserRequest, logInRequest, signUpRequest } from '../../api/users';
+import { getUserRequest, logInRequest, signUpRequest } from '@/api/users';
 
 // initial state
 const initialState = {
@@ -43,8 +43,6 @@ const actions = {
   async getUser({ commit }) {
     try {
       const res = await getUserRequest();
-      // console.log({ res });
-      console.log({ res });
       commit('setUser', res.data);
       localStorage.setItem('vkt', res.data.token);
     } catch (err) {

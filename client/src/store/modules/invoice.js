@@ -1,3 +1,5 @@
+import { addInvoiceRequest } from '../../api/invoices';
+
 const initialState = {
   invoiceModal: false,
   data: [],
@@ -7,12 +9,15 @@ const initialState = {
 const getters = {};
 
 const actions = {
-  // async addInvoice({ commit }, data) {
-  //   try {
-  //     const res = await addInvoiceRequest(data);
-  //     commit('insertInvoice', res.data);
-  //   } catch (err) {}
-  // },
+  async addInvoice({ commit }, data) {
+    try {
+      const res = await addInvoiceRequest(data);
+      console.log({ res });
+      commit('insertInvoice', res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  },
   // getInvoices() {},
 };
 

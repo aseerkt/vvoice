@@ -63,11 +63,21 @@ export default {
 }
 
 :root {
-  --clr-text-primary: #2c3e50;
+  --clr-text-primary: #fff;
+  --clr-text-secondary: #fff;
+  --clr-bg-primary: #141625;
+  --clr-bg-secondary: #1e2139;
+  --clr-bg-teritiary: #252945;
+  --clr-border: #252945;
 }
 
 [data-theme='light'] {
-  --clr-text-primary: #222;
+  --clr-text-primary: #111;
+  --clr-text-secondary: #fff;
+  --clr-bg-primary: #fff;
+  --clr-bg-secondary: #f4f4f4;
+  --clr-bg-teritiary: #f1f2f557;
+  --clr-border: lightgray;
 }
 
 #app {
@@ -80,7 +90,7 @@ export default {
 .app {
   display: flex;
   flex-direction: column;
-  background: #141625;
+  background: var(--clr-bg-primary);
   min-height: 100vh;
 
   @media screen and (min-width: 900px) {
@@ -103,8 +113,8 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #141625;
-  color: #fff;
+  background: var(--clr-bg-primary);
+  color: var(--clr-text-primary);
 
   p {
     margin-top: 16px;
@@ -137,11 +147,12 @@ export default {
 input,
 select {
   width: 100%;
-  background: #1e2139;
-  color: #fff;
+  background: var(--clr-bg-secondary);
+  color: var(--clr-text-primary);
   border-radius: 4px;
   padding: 12px 8px;
-  border: none;
+  /* border: none; */
+  border: 1px solid var(--clr-border);
 
   &:focus {
     outline: none;
@@ -155,17 +166,7 @@ select {
   padding: 40px 10px;
   max-width: 850px;
   margin: 0 auto;
-  @media (min-width: 900px) {
-    padding-top: 72px;
-  }
-}
-
-.container {
-  width: 100%;
-  padding: 40px 10px;
-  max-width: 850px;
-  margin: 0 auto;
-  @media (min-width: 900px) {
+  @media screen and (min-width: 768px) {
     padding-top: 72px;
   }
 }
@@ -178,6 +179,6 @@ button,
   border: none;
   font-size: 12px;
   margin-right: 8px;
-  color: #fff;
+  color: var(--clr-text-primary);
 }
 </style>
