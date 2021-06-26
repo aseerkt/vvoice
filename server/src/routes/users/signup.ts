@@ -52,7 +52,8 @@ const signup: FastifyPluginAsync = async function (fastify, opts) {
             photoURL: true,
           },
         });
-        res.code(201).send(user);
+        const token = await res.jwtSign({ id: user.id }, { expiresIn: '7d' });
+        res.code(201).send({ ...user, token });
       } catch (err) {
         console.error(err);
         res.code(500).send({ error: 'Unable to register user' });

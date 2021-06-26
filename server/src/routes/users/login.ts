@@ -23,23 +23,27 @@ const login: FastifyPluginAsync = async function (fastify, opts) {
       schema: {
         body: LoginBodySchema,
       },
-      // validatorCompiler: ({ schema, method, url, httpPart }) => {
-      //   return (data) => (schema as any).validate(data, { abortEarly: false });
-      // },
     },
     async (req, res) => {
       try {
         const { email, password } = req.body;
+
         const user = await fastify.prisma.user.findUnique({
           where: { email },
         });
         if (!user) {
-          return res.code(404).send({ email: 'Email is not registered' });
+          return res.code(404).send({
+            statusCode: 404,
+            error: 'Not found',
+            message: '"email" not registered',
+          });
         }
+
         const isMatch = await verify(user.password, password);
         if (!isMatch) {
           return res.code(400).send({ password: 'Password is incorrect' });
         }
+
         const token = await res.jwtSign({ id: user.id }, { expiresIn: '7d' });
 
         return res.code(200).send({

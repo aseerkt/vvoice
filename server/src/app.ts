@@ -1,6 +1,8 @@
 import { join } from 'path';
 import AutoLoad, { AutoloadPluginOptions } from 'fastify-autoload';
+import fastifyCors from 'fastify-cors';
 import { FastifyPluginAsync } from 'fastify';
+import Joi = require('joi');
 
 export type AppOptions = {
   // Place your custom options for app below here.
@@ -12,10 +14,14 @@ const app: FastifyPluginAsync<AppOptions> = async (
 ): Promise<void> => {
   // Place here your custom code!
 
+  fastify.register(fastifyCors, { origin: 'http://localhost:8080' });
+
   fastify.setValidatorCompiler(
     ({ schema }) =>
       (data) =>
-        (schema as any).validate(data, { abortEarly: false })
+        (schema as Joi.ObjectSchema<any>).validate(data, {
+          abortEarly: false,
+        })
   );
 
   // Do not touch the following lines
