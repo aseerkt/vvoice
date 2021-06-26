@@ -1,6 +1,6 @@
 <template>
   <div v-if="!mobile" class="app">
-    <Navigation />
+    <Navigation v-if="showNav" />
     <div class="app-content">
       <transition name="invoice">
         <InvoiceModal v-if="invoiceModal" />
@@ -22,6 +22,7 @@ import InvoiceModal from './components/InvoiceModal.vue';
 export default {
   data() {
     return {
+      showNav: false,
       mobile: null,
     };
   },
@@ -43,7 +44,13 @@ export default {
     },
   },
   computed: {
-    ...mapState(['invoiceModal']),
+    ...mapState('invoice', ['invoiceModal']),
+  },
+  watch: {
+    $route(to) {
+      // console.log({ to, from });
+      this.showNav = to.path === '/';
+    },
   },
 };
 </script>
@@ -106,6 +113,31 @@ export default {
 .invoice-enter-from,
 .invoice-leave-to {
   transform: translateX(-100%);
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+
+  label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+}
+
+input,
+select {
+  width: 100%;
+  background: #1e2139;
+  color: #fff;
+  border-radius: 4px;
+  padding: 12px 8px;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 /* Utilities */

@@ -40,7 +40,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['TOGGLE_INVOICE']),
+    ...mapMutations('invoice', ['toggleInvoice']),
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu;
     },
@@ -48,7 +48,7 @@ export default {
       this.filterMenu = false;
     },
     newInvoice() {
-      this.TOGGLE_INVOICE();
+      this.toggleInvoice();
     },
   },
 };

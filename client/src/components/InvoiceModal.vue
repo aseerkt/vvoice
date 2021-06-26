@@ -74,7 +74,7 @@
 
         <div class="input">
           <label for="paymentTerms">Payment Terms</label>
-          <select type="text" id="paymentTerms" v-model="paymentTerms">
+          <select id="paymentTerms" v-model="paymentTerms">
             <option value="30">Net 30 days</option>
             <option value="60">Net 60 days</option>
           </select>
@@ -111,7 +111,7 @@
 
       <div class="save">
         <div class="left">
-          <button @click="closeInvoice" class="red">Cancel</button>
+          <button type="button" @click="closeInvoice" class="red">Cancel</button>
         </div>
         <div class="right">
           <button @click="saveDraft" class="dark-purple">
@@ -128,7 +128,8 @@
 
 <script>
 import { mapMutations } from 'vuex';
-import uid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
+import axios from 'axios';
 
 export default {
   name: 'InvoiceModal',
@@ -168,14 +169,65 @@ export default {
     });
   },
   methods: {
-    ...mapMutations(['TOGGLE_INVOICE']),
+    ...mapMutations('invoice', ['toggleInvoice']),
 
     closeInvoice() {
-      this.TOGGLE_INVOICE();
+      this.toggleInvoice();
+    },
+    saveDraft() {
+      this.invoiceDraft = true;
+    },
+    publishInvoice() {
+      this.invoicePending = true;
+    },
+    async uploadInvoice() {
+      if (this.invoiceItemList.length <= 0) {
+        // eslint-disable-next-line
+        alert('Please ensure you filled out work items');
+      }
+      this.calcInvoiceTotal();
+
+      const res = await axios.post(
+        'http://localhost:3000/api/invoices/new',
+        {
+          invoiceId: uuid(6),
+          billerStreetAddress: this.billerStreetAddress,
+          billerCity: this.billerCity,
+          billerZipCode: this.billerZipCode,
+          billerCountry: this.billerCountry,
+          clientName: this.clientName,
+          clientEmail: this.clientEmail,
+          clientStreetAddress: this.clientStreetAddress,
+          clientCity: this.clientCity,
+          clientZipCode: this.clientZipCode,
+          clientCountry: this.clientCountry,
+          invoiceDate: this.invoiceDate,
+          invoiceDateUnix: this.invoiceDateUnix,
+          paymentTerms: this.paymentTerms,
+          paymentDueDate: this.paymentDueDate,
+          paymentDueDateUnix: this.paymentDueDateUnix,
+          productDescription: this.productDescription,
+          invoiceItemList: this.invoiceItemList,
+          invoiceTotal: this.invoiceTotal,
+          invoicePending: this.invoicePending,
+          invoiceDraft: this.invoiceDraft,
+          // invoicePaid: null,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('vtk')}`,
+          },
+        },
+      );
+      console.log(res);
+      console.log(uuid(6));
+    },
+    submitForm() {
+      this.uploadInvoice();
     },
     addNewInvoiceItem() {
       this.invoiceItemList.push({
-        id: uid(),
+        id: uuid(),
         itemName: '',
         qty: '',
         price: 0,
@@ -184,6 +236,9 @@ export default {
     },
     deleteInvoiceItem(id) {
       this.invoiceItemList = this.invoiceItemList.filter((item) => item.id !== id);
+    },
+    calcInvoiceTotal() {
+      this.invoiceTotal = this.invoiceItemList.reduce((prev, curr) => prev + curr.total, 0);
     },
   },
   watch: {
@@ -248,31 +303,6 @@ export default {
       color: #7c5dfa;
       font-size: 12px;
       margin-bottom: 24px;
-    }
-  }
-
-  .input {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 24px;
-
-    label {
-      font-size: 12px;
-      margin-bottom: 6px;
-    }
-  }
-
-  input,
-  select {
-    width: 100%;
-    background: #1e2139;
-    color: #fff;
-    border-radius: 4px;
-    padding: 12px 8px;
-    border: none;
-
-    &:focus {
-      outline: none;
     }
   }
 

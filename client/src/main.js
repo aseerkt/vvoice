@@ -1,9 +1,17 @@
 import { createApp } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import axios from 'axios';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import './config/font-awesome';
+import { BASE_URL, TOKEN_NAME } from './constants';
+
+axios.defaults.baseURL = BASE_URL;
+axios.defaults.headers = {
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${localStorage.getItem(TOKEN_NAME)}`,
+};
 
 createApp(App)
   // Click away listener directive
