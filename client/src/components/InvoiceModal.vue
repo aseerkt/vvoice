@@ -129,6 +129,7 @@
 <script>
 import { mapMutations } from 'vuex';
 import { v4 as uuid } from 'uuid';
+import makeId from '@/utils/makeId';
 import axios from 'axios';
 
 export default {
@@ -187,10 +188,10 @@ export default {
       }
       this.calcInvoiceTotal();
 
-      const res = await axios.post(
+      await axios.post(
         'http://localhost:3000/api/invoices/new',
         {
-          invoiceId: uuid(6),
+          invoiceId: makeId(6),
           billerStreetAddress: this.billerStreetAddress,
           billerCity: this.billerCity,
           billerZipCode: this.billerZipCode,
@@ -219,8 +220,8 @@ export default {
           },
         },
       );
-      console.log(res);
-      console.log(uuid(6));
+      // console.log(res);
+      // console.log(uuid(6));
     },
     submitForm() {
       this.uploadInvoice();

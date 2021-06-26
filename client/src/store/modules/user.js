@@ -43,6 +43,7 @@ const actions = {
   async getUser({ commit }) {
     try {
       const res = await getUserRequest();
+      // console.log({ res });
       console.log({ res });
       commit('setUser', res.data);
       localStorage.setItem('vkt', res.data.token);
